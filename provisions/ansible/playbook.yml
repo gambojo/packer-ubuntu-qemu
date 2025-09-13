@@ -1,0 +1,13 @@
+- name: Check host for 22 port
+  hosts: all
+  gather_facts: true
+  any_errors_fatal: true
+  become: true
+  vars:
+    ansible_host_key_checking: false
+  pre_tasks:
+    - name: Wait for connection to hosts
+      ansible.builtin.wait_for_connection:
+        timeout: 60
+  roles:
+    - role: clean

@@ -14,3 +14,14 @@ crash.log
 
 # For built boxes
 *.box
+
+# Output objects
+output/
+build/
+
+# Images
+*.raw
+*.qcow2
+
+# Check sum
+*.sha256

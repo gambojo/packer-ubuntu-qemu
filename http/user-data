@@ -1,0 +1,68 @@
+#cloud-config
+autoinstall:
+  version: 1
+
+  locales:
+    - en_US.UTF-8
+    - ru_RU.UTF-8
+
+  locale: en_US
+  keyboard:
+    layout: us
+
+  ssh:
+    install-server: true
+    allow-pw: true
+
+  apt:
+    preserve_sources_list: false
+    disable_sources: [cdrom]
+    primary:
+      - arches: [amd64]
+        uri: http://archive.ubuntu.com/ubuntu
+
+  packages:
+    - qemu-guest-agent
+    - openssh-server
+    - curl
+
+  user-data:
+    disable_root: true
+    timezone: UTC
+    users:
+      - name: ubuntu
+        gecos: ubuntu
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        groups: [adm, dip, plugdev, netdev, lxd, sudo]
+        shell: /bin/bash
+        lock_passwd: false
+        passwd: "$6$sVtBeD1UyGo5P0E8$jLN8j9Px88HYIygjYYOaqRcZGUIVXX6vFVu/NqJHmhef6afReIepGLZIbqoMUtCXat6lOIMZuuOlSl8weD2Vo1"
+
+  early-commands:
+    - echo "Installing debian" > /tmp/install.log
+
+  late-commands:
+    - sudo systemctl enable ssh
+
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+    ### For advanced settings
+    # config:
+    #   - type: disk
+    #     id: root-disk
+    #     size: largest
+    #   - type: partition
+    #     id: boot-partition
+    #     device: root-disk
+    #     size: 10%
+    #   - type: partition
+    #     id: root-partition
+    #     device: root-disk
+    #     size: 20G
+    #   - type: partition
+    #     id: data-partition
+    #     device: root-disk
+    #     size: -1
